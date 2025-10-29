@@ -319,3 +319,6 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,jupyternotebooks,pycharm
 # Ignore dynaconf secret files
 .secrets.*
+
+# Ignore data files
+*ks_lpu_vigente_itau_agencias.csv*

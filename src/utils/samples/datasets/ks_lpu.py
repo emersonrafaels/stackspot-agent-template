@@ -10,6 +10,8 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 
 from src.utils.data.data_functions import export_data
+from src.config.config_logger import logger
+
 
 @dataclass
 class LPUItem:
@@ -44,9 +46,9 @@ class PricingConfig:
         source (str): Source description of the pricing table
     """
 
-    validity_start: str = "2024-08-01"
-    validity_end: str = "2026-12-31"
-    source: str = "Tabela Interna v2024.08 – Agência Varejo/Premium (ilustrativa)"
+    validity_start: str = "2025-01-01"
+    validity_end: str = "2025-10-31"
+    source: str = "Tabela Interna v2025.10 – Agência Varejo/Premium (ilustrativa)"
 
 
 def create_base_items() -> List[LPUItem]:
@@ -56,7 +58,8 @@ def create_base_items() -> List[LPUItem]:
     Returns:
         List[LPUItem]: List containing all base LPU items with their properties
     """
-    return [
+    logger.debug("Creating base LPU items")
+    items = [
         LPUItem(
             "LPU-001",
             "Piso vinílico em manta, instalação completa",
@@ -267,6 +270,8 @@ def create_base_items() -> List[LPUItem]:
         ),
     ]
 
+    return items
+
 
 def get_regional_factors() -> Dict[str, float]:
     """
@@ -355,8 +360,21 @@ def main():
     """
     Main execution function that generates and saves the price table.
     """
-    price_table = generate_price_table()
-    save_price_table(price_table)
+    logger.info("Starting LPU price table generation process")
+    try:
+        price_table = generate_price_table()
+        output_file = Path(
+            Path(__file__).parents[0], "ks_lpu_vigente_itau_agencias.csv"
+        )
+
+        save_price_table(price_table, filename=str(output_file))
+
+        logger.success(
+            f"Successfully generated and saved price table with {len(price_table)} rows"
+        )
+    except Exception as e:
+        logger.error(f"Error in price table generation process: {str(e)}")
+        raise
 
 
 if __name__ == "__main__":
