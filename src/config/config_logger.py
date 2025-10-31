@@ -15,7 +15,7 @@ def setup_logger():
     - Structured format with timestamp
     """
     # Create logs directory if it doesn't exist
-    log_path = Path(__file__).parent / "logs"
+    log_path = Path(Path(__file__).parents[2], "logs")
     log_path.mkdir(exist_ok=True)
 
     # Remove default logger
@@ -53,6 +53,6 @@ def setup_logger():
 
     return logger
 
-
-# Initialize logger
-logger = setup_logger()
+if __name__ == "__main__":
+    # Initialize logger
+    logger = setup_logger()

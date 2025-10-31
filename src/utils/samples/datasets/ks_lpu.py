@@ -10,8 +10,10 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[4]))
 
 from src.utils.data.data_functions import export_data
-from src.config.config_logger import logger
+from src.config.config_logger import setup_logger
 
+# Initialize logger
+logger = setup_logger()
 
 @dataclass
 class LPUItem:
