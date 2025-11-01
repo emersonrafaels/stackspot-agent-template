@@ -1,9 +1,21 @@
+from pathlib import Path
 from dynaconf import Dynaconf
 
+# Get current directory
+CONFIG_PATH = Path(__file__).parent.resolve()
+
 settings = Dynaconf(
-    envvar_prefix="DYNACONF",
-    settings_files=["settings.toml", ".secrets.toml"],
+    settings_files=[
+        Path(CONFIG_PATH, "settings.toml"),
+        Path(CONFIG_PATH, ".secrets.toml"),
+    ],
+    environments=True,  # Enable multiple environments like development, production
+    load_dotenv=True,  # Enable loading of .env files
 )
 
-# `envvar_prefix` = export envvars with `export DYNACONF_FOO=bar`.
-# `settings_files` = Load these files in the order.
+"""
+# Validate required settings
+settings.validators.register(
+    Validator("stackspot_client_secret", must_exist=True)
+)
+"""

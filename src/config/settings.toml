@@ -1,0 +1,19 @@
+[default]
+
+[default.stackspot]
+
+[default.stackspot.auth]
+base_url = "https://idm.stackspot.com"
+api_version = "v1"
+
+[default.stackspot.inference]
+base_url_inference = "https://idm.stackspot.com"
+api_version = "v1"
+
+[development]
+debug = true
+log_level = "DEBUG"
+
+[production]
+debug = false
+log_level = "INFO"

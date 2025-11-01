@@ -1,6 +1,7 @@
-from pathlib import Path
-from loguru import logger
 import sys
+from pathlib import Path
+
+from loguru import logger
 
 
 def setup_logger():
@@ -52,6 +53,7 @@ def setup_logger():
     )
 
     return logger
+
 
 if __name__ == "__main__":
     # Initialize logger
