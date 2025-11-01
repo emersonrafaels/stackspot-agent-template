@@ -322,3 +322,6 @@ pyrightconfig.json
 
 # Ignore data files
 *ks_lpu_vigente_itau_agencias.csv*
+
+# Ignore local settings
+*.secrets.toml
