@@ -10,7 +10,7 @@ class StackSpotAPIClient:
 
     def __init__(self, base_url: str = None, auth_url: str = None, realm: str = None):
         """Initialize API client.
-        
+
         Args:
             base_url (str, optional): Base URL for agent API. Defaults to genai-inference-app URL.
             auth_url (str, optional): Auth URL for token. Defaults to idm URL.
@@ -19,53 +19,59 @@ class StackSpotAPIClient:
         self.base_url = base_url or "https://genai-inference-app.stackspot.com/v1"
         self.auth_url = auth_url or "https://idm.stackspot.com"
         self.realm = realm
-        self._headers = {
-            "Content-Type": "application/json",
-        }
+        if not self.realm:
+            raise ValueError("Account realm is required for authentication")
 
     def _create_auth_header(self, access_token: str) -> Dict[str, str]:
         """Create authorization header with access token."""
-        return {"Authorization": f"Bearer {access_token}"}
+        return {
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        }
 
     def get_oauth_token(self, client_id: str, client_secret: str) -> str:
-        """Get OAuth token from StackSpot API."""
+        """Get OAuth token from StackSpot."""
         try:
-            if not self.realm:
-                raise ValueError("Account realm is required for authentication")
-
             url = f"{self.auth_url}/{self.realm}/oidc/oauth/token"
-            logger.debug(f"Getting OAuth token from: {url}")
 
-            # Use form data instead of JSON for token request
+            # Use form data as specified in documentation
             payload = {
-                "grant_type": "client_credentials",
                 "client_id": client_id,
-                "client_secret": client_secret
-            }
-            headers = {
-                "Content-Type": "application/x-www-form-urlencoded"
+                "grant_type": "client_credentials",
+                "client_secret": client_secret,
             }
 
+            headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
+            logger.debug(f"Getting OAuth token from: {url}")
             response = requests.post(url, headers=headers, data=payload)
             response.raise_for_status()
-            return response.json()["access_token"]
 
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Failed to get OAuth token: {str(e)}")
+            token_data = response.json()
+            access_token = token_data.get("access_token")
+
+            if not access_token:
+                raise ValueError("No access token in response")
+
+            return access_token
+
+        except Exception as e:
+            logger.error(f"Authentication failed: {str(e)}")
             raise
 
     def get(self, endpoint: str, access_token: str) -> Dict[str, Any]:
         """Make GET request to StackSpot API."""
         try:
             url = f"{self.base_url}/{endpoint}"
-            logger.debug(f"Making GET request to: {url}")
+            headers = self._create_auth_header(access_token)
 
-            headers = {**self._headers, **self._create_auth_header(access_token)}
+            logger.debug(f"Making GET request to: {url}")
             response = requests.get(url, headers=headers)
             response.raise_for_status()
+
             return response.json()
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             logger.error(f"API request failed: {str(e)}")
             raise
 
@@ -73,14 +79,15 @@ class StackSpotAPIClient:
         """Make POST request to StackSpot API."""
         try:
             url = f"{self.base_url}/{endpoint}"
-            logger.debug(f"Making POST request to: {url}")
+            headers = self._create_auth_header(access_token)
 
-            headers = {**self._headers, **self._create_auth_header(access_token)}
+            logger.debug(f"Making POST request to: {url}")
             response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
+
             return response.json()
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             logger.error(f"API request failed: {str(e)}")
             raise
 
@@ -88,14 +95,15 @@ class StackSpotAPIClient:
         """Make PUT request to StackSpot API."""
         try:
             url = f"{self.base_url}/{endpoint}"
-            logger.debug(f"Making PUT request to: {url}")
+            headers = self._create_auth_header(access_token)
 
-            headers = {**self._headers, **self._create_auth_header(access_token)}
+            logger.debug(f"Making PUT request to: {url}")
             response = requests.put(url, headers=headers, json=data)
             response.raise_for_status()
+
             return response.json()
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             logger.error(f"API request failed: {str(e)}")
             raise
 
@@ -103,13 +111,14 @@ class StackSpotAPIClient:
         """Make DELETE request to StackSpot API."""
         try:
             url = f"{self.base_url}/{endpoint}"
-            logger.debug(f"Making DELETE request to: {url}")
+            headers = self._create_auth_header(access_token)
 
-            headers = {**self._headers, **self._create_auth_header(access_token)}
+            logger.debug(f"Making DELETE request to: {url}")
             response = requests.delete(url, headers=headers)
             response.raise_for_status()
+
             return response.json()
 
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             logger.error(f"API request failed: {str(e)}")
             raise

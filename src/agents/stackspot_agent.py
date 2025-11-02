@@ -16,37 +16,47 @@ class StackSpotAgent(BaseAgent):
         description: str,
         llm_config: LLMConfig,
         prompt_config: PromptConfig,
+        client_id: str,
         client_secret: str,
         realm: str,
         base_url: str = None,
         auth_url: str = None,
     ):
         """Initialize StackSpot Agent.
-        
+
         Args:
-            client_secret (str): OAuth client secret
-            name (str): Agent name/client ID
+            name (str): Agent name
             description (str): Agent description
             llm_config (LLMConfig): LLM configuration
-            prompt_config (PromptConfig): Prompt configuration 
+            prompt_config (PromptConfig): Prompt configuration
+            client_id (str): OAuth client ID
+            client_secret (str): OAuth client secret
             realm (str): Account realm for authentication
-            base_url (str, optional): Base URL for agent API. Defaults to None.
-            auth_url (str, optional): Auth URL for token. Defaults to None.
+            base_url (str, optional): Base inference API URL. Defaults from settings.
+            auth_url (str, optional): Auth URL for token. Defaults from settings.
         """
         self.name = name
         self.description = description
         self.llm = llm_config
         self.prompt = prompt_config
-        
+
+        from src.config.stackspot_config import get_settings
+
+        settings = get_settings()
+
+        # Get base URLs from settings if not provided
+        inference_base = (
+            base_url
+            or f"{settings.get("stackspot.inference.base_url")}{settings.get("stackspot.inference.api_version")}"
+        )
+        auth_base = auth_url or settings.get("stackspot.auth.base_url")
+
         # Initialize API client and get OAuth token
         self.api_client = StackSpotAPIClient(
-            base_url=base_url,
-            auth_url=auth_url,
-            realm=realm
+            base_url=inference_base, auth_url=auth_base, realm=realm
         )
         self.access_token = self.api_client.get_oauth_token(
-            client_id=self.name,
-            client_secret=client_secret
+            client_id=client_id, client_secret=client_secret
         )
 
     def create(self) -> Dict[str, Any]:
@@ -60,9 +70,7 @@ class StackSpotAgent(BaseAgent):
                 "prompt": self.prompt.to_dict(),
             }
             result = self.api_client.post(
-                endpoint="agents",
-                data=payload,
-                access_token=self.access_token
+                endpoint="agents", data=payload, access_token=self.access_token
             )
             logger.success(f"Agent created successfully: {result.get('id', 'No ID')}")
             return result
@@ -71,14 +79,14 @@ class StackSpotAgent(BaseAgent):
             raise
 
     def execute(
-        self, 
+        self,
         prompt: str,
         streaming: bool = True,
         use_stackspot_knowledge: bool = True,
-        return_ks_in_response: bool = False
+        return_ks_in_response: bool = False,
     ) -> Dict[str, Any]:
         """Execute a prompt with the agent.
-        
+
         Args:
             prompt (str): The user prompt to send to the agent
             streaming (bool, optional): Whether to stream responses. Defaults to True.
@@ -91,26 +99,25 @@ class StackSpotAgent(BaseAgent):
                 "user_prompt": prompt,
                 "streaming": streaming,
                 "stackspot_knowledge": use_stackspot_knowledge,
-                "return_ks_in_response": return_ks_in_response
+                "return_ks_in_response": return_ks_in_response,
             }
             result = self.api_client.post(
                 endpoint=f"agent/{self.name}/chat",
                 data=payload,
-                access_token=self.access_token
+                access_token=self.access_token,
             )
             logger.success("Prompt executed successfully")
             return result
         except Exception as e:
             logger.error(f"Error executing prompt: {str(e)}")
             raise
-            
+
     def list(self) -> Dict[str, Any]:
         """List all agents."""
         try:
             logger.info("Listing all agents...")
             result = self.api_client.get(
-                endpoint="agents",
-                access_token=self.access_token
+                endpoint="agents", access_token=self.access_token
             )
             logger.success("Agents listed successfully")
             return result
@@ -123,8 +130,7 @@ class StackSpotAgent(BaseAgent):
         try:
             logger.info(f"Getting agent details: {self.name}")
             result = self.api_client.get(
-                endpoint=f"agents/{self.name}",
-                access_token=self.access_token
+                endpoint=f"agents/{self.name}", access_token=self.access_token
             )
             logger.success("Agent details retrieved successfully")
             return result
@@ -145,7 +151,7 @@ class StackSpotAgent(BaseAgent):
             result = self.api_client.put(
                 endpoint=f"agents/{self.name}",
                 data=payload,
-                access_token=self.access_token
+                access_token=self.access_token,
             )
             logger.success("Agent updated successfully")
             return result
@@ -158,8 +164,7 @@ class StackSpotAgent(BaseAgent):
         try:
             logger.info(f"Deleting agent: {self.name}")
             result = self.api_client.delete(
-                endpoint=f"agents/{self.name}",
-                access_token=self.access_token
+                endpoint=f"agents/{self.name}", access_token=self.access_token
             )
             logger.success("Agent deleted successfully")
             return result
