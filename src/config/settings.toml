@@ -1,13 +1,14 @@
 [default]
 
 [default.stackspot]
+agent_id = "01K8F6PDXR3RQKFKBQTJ8D1Z7Y"
 
 [default.stackspot.auth]
 base_url = "https://idm.stackspot.com"
 api_version = "v1"
 
 [default.stackspot.inference]
-base_url_inference = "https://idm.stackspot.com"
+base_url = "https://genai-inference-app.stackspot.com"
 api_version = "v1"
 
 [development]
