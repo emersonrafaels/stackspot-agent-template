@@ -14,16 +14,17 @@ def run_example():
     """Example of creating and using a StackSpot agent."""
     # Create configurations
     llm_config = LLMConfig(provider="openai", model="gpt-4o-mini")
-    prompt_config = PromptConfig(content="Hello, I am a StackSpot agent!")
+    system_prompt_config = PromptConfig(content="Hello, I am a StackSpot agent!")
 
     # Create agent
     agent = StackSpotAgent(
         name="Example Agent",
         description="A simple example agent",
         llm_config=llm_config,
-        prompt_config=prompt_config,
+        prompt_config=system_prompt_config,
+        client_id=settings.get("stackspot_client_id"),
         client_secret=settings.get("stackspot_client_secret"),
-        realm=settings.get("account_realm"),
+        realm=settings.get("stackspot_realm"),
     )
 
     # Create and execute
