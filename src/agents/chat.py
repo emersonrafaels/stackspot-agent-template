@@ -1,5 +1,6 @@
 """Module for chatting with StackSpot agents."""
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Union
+from pathlib import Path
 
 from src.agents.stackspot_agent import StackSpotAgent
 from src.config.config_logger import logger
@@ -64,7 +65,8 @@ class AgentChat(StackSpotAgent):
         context: Optional[list] = None,
         streaming: bool = True,
         use_stackspot_docs: bool = True,
-        return_ks_in_response: bool = True
+        return_ks_in_response: bool = True,
+        files: List[Union[str, Path]] = None
     ) -> str:
         """Send a question to the agent.
 
@@ -74,18 +76,29 @@ class AgentChat(StackSpotAgent):
             streaming (bool, optional): Enable streaming responses. Defaults to True.
             use_stackspot_docs (bool, optional): Use StackSpot documentation. Defaults to True.
             return_ks_in_response (bool, optional): Return knowledge sources in response. Defaults to True.
+            files (List[Union[str, Path]], optional): List of file paths to upload and include in context.
 
         Returns:
             str: Agent's response
         """
         try:
+            from src.utils.file_utils import prepare_file_upload
+            
+            # Prepare files for upload if provided
+            upload_files = {}
+            if files:
+                for i, file_path in enumerate(files):
+                    file_info = prepare_file_upload(file_path)
+                    upload_files[f'file_{i}'] = file_info['file']
+            
             # Use parent's execute method with simplified interface
             response = self.execute(
                 prompt=question,
                 context=context,
                 streaming=streaming,
                 use_stackspot_knowledge=use_stackspot_docs,
-                return_ks_in_response=return_ks_in_response
+                return_ks_in_response=return_ks_in_response,
+                files=upload_files if upload_files else None
             )
             
             # Extract just the response text

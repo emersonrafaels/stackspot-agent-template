@@ -74,14 +74,32 @@ class StackSpotAPIClient:
             logger.error(f"API request failed: {str(e)}")
             raise
 
-    def post(self, endpoint: str, data: dict, access_token: str) -> Dict[str, Any]:
-        """Make POST request to StackSpot API."""
+    def post(self, endpoint: str, data: dict, access_token: str, files: dict = None) -> Dict[str, Any]:
+        """Make POST request to StackSpot API.
+        
+        Args:
+            endpoint (str): API endpoint
+            data (dict): Request data
+            access_token (str): OAuth access token
+            files (dict, optional): Files to upload. Format: {'file': (filename, file_object, mimetype)}
+            
+        Returns:
+            Dict[str, Any]: API response
+        """
         try:
             url = build_url(self.base_url, endpoint)
             headers = self._create_auth_header(access_token)
 
+            if files:
+                # Remove Content-Type for multipart upload
+                headers.pop('Content-Type', None)
+                # Convert data to form fields
+                form_data = {k: str(v) for k, v in data.items()}
+                response = requests.post(url, headers=headers, data=form_data, files=files)
+            else:
+                response = requests.post(url, headers=headers, json=data)
+
             logger.debug(f"Making POST request to: {url}")
-            response = requests.post(url, headers=headers, json=data)
             response.raise_for_status()
 
             return response.json()

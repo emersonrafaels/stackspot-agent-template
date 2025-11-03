@@ -97,6 +97,7 @@ class StackSpotAgent(BaseAgent):
         streaming: bool = True,
         use_stackspot_knowledge: bool = True,
         return_ks_in_response: bool = False,
+        files: Dict[str, tuple] = None
     ) -> Dict[str, Any]:
         """Execute a prompt with the agent.
 
@@ -106,6 +107,7 @@ class StackSpotAgent(BaseAgent):
             streaming (bool, optional): Whether to stream responses. Defaults to True.
             use_stackspot_knowledge (bool, optional): Use StackSpot knowledge. Defaults to True.
             return_ks_in_response (bool, optional): Return knowledge source in response. Defaults to False.
+            files (Dict[str, tuple], optional): Files to upload. Format: {'file_0': (filename, file_object, mimetype)}
         """
         try:
             logger.info(f"Executing prompt: {prompt[:50]}...")
@@ -120,6 +122,7 @@ class StackSpotAgent(BaseAgent):
                 endpoint=self.endpoint,
                 data=payload,
                 access_token=self.access_token,
+                files=files
             )
             logger.success("Prompt executed successfully")
             return result
