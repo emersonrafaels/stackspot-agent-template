@@ -61,7 +61,7 @@ def get_stackspot_config() -> dict:
     # Build auth URL with full path
     auth_url = build_url(
         settings.get("stackspot.auth.base_url", "https://idm.stackspot.com"),
-        settings.get("stackspot.realm"),
+        settings.get("stackspot_realm"),
         settings.get("stackspot.auth.oidc_resource", "oidc"),
         settings.get("stackspot.auth.oauth_resource", "oauth"),
         settings.get("stackspot.auth.token_resource", "token"),

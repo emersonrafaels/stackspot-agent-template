@@ -29,11 +29,9 @@ class StackSpotAPIClient:
             "Content-Type": "application/json",
         }
 
-    def get_oauth_token(self, client_id: str, client_secret: str) -> str:
+    def get_oauth_token(self, url, client_id: str, client_secret: str) -> str:
         """Get OAuth token from StackSpot."""
         try:
-            url = f"{self.auth_url}/{self.realm}/oidc/oauth/token"
-
             # Use form data as specified in documentation
             payload = {
                 "client_id": client_id,

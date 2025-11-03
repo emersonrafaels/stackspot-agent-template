@@ -59,7 +59,7 @@ class StackSpotAgent(BaseAgent):
 
         # Get OAuth token
         self.access_token = self.api_client.get_oauth_token(
-            url=self.auth_url, client_id=client_id, client_secret=client_secret
+            url=auth_url, client_id=client_id, client_secret=client_secret
         )
 
     def create(self) -> Dict[str, Any]:
