@@ -76,20 +76,15 @@ class AgentChat(StackSpotAgent):
             streaming (bool, optional): Enable streaming responses. Defaults to True.
             use_stackspot_docs (bool, optional): Use StackSpot documentation. Defaults to True.
             return_ks_in_response (bool, optional): Return knowledge sources in response. Defaults to True.
-            files (List[Union[str, Path]], optional): List of file paths to upload and include in context.
+            files (List[Union[str, Path]], optional): List of file paths to include in context.
 
         Returns:
             str: Agent's response
         """
         try:
-            from src.utils.file_utils import prepare_file_upload
-            
-            # Prepare files for upload if provided
-            upload_files = {}
+            # Convert any string paths to Path objects
             if files:
-                for i, file_path in enumerate(files):
-                    file_info = prepare_file_upload(file_path)
-                    upload_files[f'file_{i}'] = file_info['file']
+                files = [Path(f) if isinstance(f, str) else f for f in files]
             
             # Use parent's execute method with simplified interface
             response = self.execute(
@@ -98,7 +93,7 @@ class AgentChat(StackSpotAgent):
                 streaming=streaming,
                 use_stackspot_knowledge=use_stackspot_docs,
                 return_ks_in_response=return_ks_in_response,
-                files=upload_files if upload_files else None
+                files=files
             )
             
             # Extract just the response text
