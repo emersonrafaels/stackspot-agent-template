@@ -54,7 +54,4 @@ def setup_logger():
 
     return logger
 
-
-if __name__ == "__main__":
-    # Initialize logger
-    logger = setup_logger()
+logger = setup_logger()
