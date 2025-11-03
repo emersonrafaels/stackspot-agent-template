@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Dict, List
 
 from src.agents.base_agent import BaseAgent
@@ -97,7 +98,7 @@ class StackSpotAgent(BaseAgent):
         streaming: bool = True,
         use_stackspot_knowledge: bool = True,
         return_ks_in_response: bool = False,
-        files: Dict[str, tuple] = None
+        files: List[Path] = None
     ) -> Dict[str, Any]:
         """Execute a prompt with the agent.
 
@@ -107,7 +108,7 @@ class StackSpotAgent(BaseAgent):
             streaming (bool, optional): Whether to stream responses. Defaults to True.
             use_stackspot_knowledge (bool, optional): Use StackSpot knowledge. Defaults to True.
             return_ks_in_response (bool, optional): Return knowledge source in response. Defaults to False.
-            files (Dict[str, tuple], optional): Files to upload. Format: {'file_0': (filename, file_object, mimetype)}
+            files (List[Path], optional): List of paths to files to upload and include in context.
         """
         try:
             logger.info(f"Executing prompt: {prompt[:50]}...")

@@ -2,50 +2,14 @@
 
 import sys
 from functools import lru_cache
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Optional
-from urllib.parse import urlparse, urlunparse
 
 # Adjust import path for data functions
 sys.path.insert(0, str(Path(__file__).parents[2]))
 
 from src.config.config_dynaconf import get_settings
-
-
-def build_url(base_url: str, *path_parts: str) -> str:
-    """Build a URL by combining base URL with path parts.
-
-    Args:
-        base_url (str): Base URL with scheme and domain
-        *path_parts (str): Path parts to append
-
-    Returns:
-        str: Complete URL with path
-    """
-    # Parse base URL
-    parsed = urlparse(base_url)
-
-    # Combine path parts using PurePosixPath for URL path handling
-    # Filter out empty/None values
-    clean_parts = [p for p in path_parts if p]
-    path = str(PurePosixPath(*clean_parts))
-
-    # If base URL had a path, combine it with new path
-    if parsed.path and parsed.path != "/":
-        base_path = parsed.path.rstrip("/")
-        path = str(PurePosixPath(base_path.lstrip("/"), path))
-
-    # Reconstruct URL with new path
-    return urlunparse(
-        (
-            parsed.scheme,
-            parsed.netloc,
-            path,
-            parsed.params,
-            parsed.query,
-            parsed.fragment,
-        )
-    )
+from src.utils.url_utils import build_url
 
 
 @lru_cache()
