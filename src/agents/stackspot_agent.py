@@ -1,10 +1,18 @@
 from typing import Any, Dict
 
 from src.agents.base_agent import BaseAgent
+from src.config.config_dynaconf import get_settings
 from src.config.config_logger import logger
+from src.config.stackspot_config import get_stackspot_config
 from src.models.llm import LLMConfig
 from src.models.prompt import PromptConfig
 from src.utils.api_client import StackSpotAPIClient
+
+# Retrieve settings instance
+settings = get_settings()
+
+# Retrieve settings instance
+stackspot_config = get_stackspot_config()
 
 
 class StackSpotAgent(BaseAgent):
@@ -40,23 +48,18 @@ class StackSpotAgent(BaseAgent):
         self.llm = llm_config
         self.prompt = prompt_config
 
-        from src.config.stackspot_config import get_settings
-
-        settings = get_settings()
-
         # Get base URLs from settings if not provided
-        inference_base = (
-            base_url
-            or f"{settings.get("stackspot.inference.base_url")}{settings.get("stackspot.inference.api_version")}"
-        )
-        auth_base = auth_url or settings.get("stackspot.auth.base_url")
+        inference_url = stackspot_config.get("inference_url")
+        auth_url = stackspot_config.get("auth_url")
 
         # Initialize API client and get OAuth token
         self.api_client = StackSpotAPIClient(
-            base_url=inference_base, auth_url=auth_base, realm=realm
+            base_url=inference_url, auth_url=auth_url, realm=realm
         )
+
+        # Get OAuth token
         self.access_token = self.api_client.get_oauth_token(
-            client_id=client_id, client_secret=client_secret
+            url=self.auth_url, client_id=client_id, client_secret=client_secret
         )
 
     def create(self) -> Dict[str, Any]:

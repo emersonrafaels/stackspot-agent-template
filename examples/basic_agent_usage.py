@@ -5,9 +5,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.agents.stackspot_agent import StackSpotAgent
-from src.config.config_dynaconf import settings
+from src.config.config_dynaconf import get_settings
 from src.models.llm import LLMConfig
 from src.models.prompt import PromptConfig
+
+# Retrieve settings instance
+settings = get_settings()
 
 
 def run_example():
