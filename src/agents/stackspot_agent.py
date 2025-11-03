@@ -27,8 +27,9 @@ class StackSpotAgent(BaseAgent):
         client_id: str,
         client_secret: str,
         realm: str,
-        base_url: str = None,
         auth_url: str = None,
+        base_url: str = None,
+        endpoint: str = None,
     ):
         """Initialize StackSpot Agent.
 
@@ -40,8 +41,9 @@ class StackSpotAgent(BaseAgent):
             client_id (str): OAuth client ID
             client_secret (str): OAuth client secret
             realm (str): Account realm for authentication
-            base_url (str, optional): Base inference API URL. Defaults from settings.
             auth_url (str, optional): Auth URL for token. Defaults from settings.
+            base_url (str, optional): Base inference API URL. Defaults from settings.
+            endpoint (str, optional): API endpoint for agent operations. Defaults to None.
         """
         self.name = name
         self.description = description
@@ -49,18 +51,25 @@ class StackSpotAgent(BaseAgent):
         self.prompt = prompt_config
 
         # Get base URLs from settings if not provided
-        inference_url = stackspot_config.get("inference_url")
-        auth_url = stackspot_config.get("auth_url")
+        inference_url = base_url or stackspot_config.get("inference_url")
+        auth_url = auth_url or stackspot_config.get("auth_url")
 
         # Initialize API client and get OAuth token
         self.api_client = StackSpotAPIClient(
-            base_url=inference_url, auth_url=auth_url, realm=realm
+            base_url=inference_url,
+            auth_url=auth_url,
+            realm=realm
         )
 
         # Get OAuth token
         self.access_token = self.api_client.get_oauth_token(
-            url=auth_url, client_id=client_id, client_secret=client_secret
+            url=auth_url,
+            client_id=client_id,
+            client_secret=client_secret
         )
+        
+        # Set endpoint for agent operations
+        self.endpoint = endpoint or "chat"
 
     def create(self) -> Dict[str, Any]:
         """Create a new agent in StackSpot."""
@@ -105,7 +114,7 @@ class StackSpotAgent(BaseAgent):
                 "return_ks_in_response": return_ks_in_response,
             }
             result = self.api_client.post(
-                endpoint=f"agent/{self.name}/chat",
+                endpoint=self.endpoint,
                 data=payload,
                 access_token=self.access_token,
             )

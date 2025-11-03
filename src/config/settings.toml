@@ -14,7 +14,7 @@ token_resource = "token"
 base_url = "https://genai-inference-app.stackspot.com"
 api_version = "v1"
 agent_resource = "agent"
-chat_resource = "chat"
+chat_endpoint = "chat"
 
 [development]
 debug = true

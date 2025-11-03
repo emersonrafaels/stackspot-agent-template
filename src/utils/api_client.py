@@ -3,6 +3,7 @@ from typing import Any, Dict
 import requests
 
 from src.config.config_logger import logger
+from src.utils.url_utils import build_url
 
 
 class StackSpotAPIClient:
@@ -60,7 +61,7 @@ class StackSpotAPIClient:
     def get(self, endpoint: str, access_token: str) -> Dict[str, Any]:
         """Make GET request to StackSpot API."""
         try:
-            url = f"{self.base_url}/{endpoint}"
+            url = build_url(self.base_url, endpoint)
             headers = self._create_auth_header(access_token)
 
             logger.debug(f"Making GET request to: {url}")
@@ -76,7 +77,7 @@ class StackSpotAPIClient:
     def post(self, endpoint: str, data: dict, access_token: str) -> Dict[str, Any]:
         """Make POST request to StackSpot API."""
         try:
-            url = f"{self.base_url}/{endpoint}"
+            url = build_url(self.base_url, endpoint)
             headers = self._create_auth_header(access_token)
 
             logger.debug(f"Making POST request to: {url}")
@@ -92,7 +93,7 @@ class StackSpotAPIClient:
     def put(self, endpoint: str, data: dict, access_token: str) -> Dict[str, Any]:
         """Make PUT request to StackSpot API."""
         try:
-            url = f"{self.base_url}/{endpoint}"
+            url = build_url(self.base_url, endpoint)
             headers = self._create_auth_header(access_token)
 
             logger.debug(f"Making PUT request to: {url}")
@@ -108,7 +109,7 @@ class StackSpotAPIClient:
     def delete(self, endpoint: str, access_token: str) -> Dict[str, Any]:
         """Make DELETE request to StackSpot API."""
         try:
-            url = f"{self.base_url}/{endpoint}"
+            url = build_url(self.base_url, endpoint)
             headers = self._create_auth_header(access_token)
 
             logger.debug(f"Making DELETE request to: {url}")

@@ -75,8 +75,12 @@ def get_stackspot_config() -> dict:
         settings.get("stackspot.inference.api_version", "v1"),
         settings.get("stackspot.inference.agent_resource", "agent"),
         settings.get("stackspot.agent_id"),
-        settings.get("stackspot.inference.chat_resource", "chat"),
     )
+    
+    # Get agent id
+    agent_id = settings.get("stackspot.agent_id")
+    if not agent_id:
+        raise ValueError("Missing required setting: stackspot.agent_id")
 
     # Get credentials with validation
     realm = settings.get("stackspot_realm")
@@ -92,6 +96,7 @@ def get_stackspot_config() -> dict:
         raise ValueError("Missing required setting: stackspot.client_secret")
 
     return {
+        "agent_id": agent_id,
         "realm": realm,
         "client_id": client_id,
         "client_secret": client_secret,
