@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from src.agents.base_agent import BaseAgent
 from src.config.config_dynaconf import get_settings
@@ -93,6 +93,7 @@ class StackSpotAgent(BaseAgent):
     def execute(
         self,
         prompt: str,
+        context: List[Dict[str, str]] = None,
         streaming: bool = True,
         use_stackspot_knowledge: bool = True,
         return_ks_in_response: bool = False,
@@ -101,6 +102,7 @@ class StackSpotAgent(BaseAgent):
 
         Args:
             prompt (str): The user prompt to send to the agent
+            context (List[Dict[str, str]], optional): Previous conversation context. Defaults to None.
             streaming (bool, optional): Whether to stream responses. Defaults to True.
             use_stackspot_knowledge (bool, optional): Use StackSpot knowledge. Defaults to True.
             return_ks_in_response (bool, optional): Return knowledge source in response. Defaults to False.
@@ -109,6 +111,7 @@ class StackSpotAgent(BaseAgent):
             logger.info(f"Executing prompt: {prompt[:50]}...")
             payload = {
                 "user_prompt": prompt,
+                "context": context or [],
                 "streaming": streaming,
                 "stackspot_knowledge": use_stackspot_knowledge,
                 "return_ks_in_response": return_ks_in_response,

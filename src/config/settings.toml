@@ -1,7 +1,7 @@
 [default]
 
 [default.stackspot]
-agent_id = "01K8F6PDXR3RQKFKBQTJ8D1Z7Y"
+agent_id = "01K950EYCETA9KX9XBMNNAHE49"
 
 [default.stackspot.auth]
 base_url = "https://idm.stackspot.com"

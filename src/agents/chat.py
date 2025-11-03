@@ -60,16 +60,20 @@ class AgentChat(StackSpotAgent):
 
     def ask(
         self, 
-        question: str, 
+        question: str,
+        context: Optional[list] = None,
+        streaming: bool = True,
         use_stackspot_docs: bool = True,
-        streaming: bool = True
+        return_ks_in_response: bool = True
     ) -> str:
         """Send a question to the agent.
 
         Args:
             question (str): The question to ask
-            use_stackspot_docs (bool, optional): Use StackSpot documentation. Defaults to True.
+            context (list, optional): Previous conversation context. Defaults to None.
             streaming (bool, optional): Enable streaming responses. Defaults to True.
+            use_stackspot_docs (bool, optional): Use StackSpot documentation. Defaults to True.
+            return_ks_in_response (bool, optional): Return knowledge sources in response. Defaults to True.
 
         Returns:
             str: Agent's response
@@ -78,13 +82,14 @@ class AgentChat(StackSpotAgent):
             # Use parent's execute method with simplified interface
             response = self.execute(
                 prompt=question,
+                context=context,
                 streaming=streaming,
                 use_stackspot_knowledge=use_stackspot_docs,
-                return_ks_in_response=False
+                return_ks_in_response=return_ks_in_response
             )
             
             # Extract just the response text
-            answer = response.get("response", "")
+            answer = response.get("message", "")
             return answer
 
         except Exception as e:
