@@ -16,6 +16,12 @@ api_version = "v1"
 agent_resource = "agent"
 chat_endpoint = "chat"
 
+[default.stackspot.upload]
+base_url = "https://data-integration-api.stackspot.com"
+api_version = "v2"
+file_upload_resource = "file-upload"
+form_endpoint = "form"
+
 [development]
 debug = true
 log_level = "DEBUG"
