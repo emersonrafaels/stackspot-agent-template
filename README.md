@@ -2,12 +2,21 @@
 
 Uma API Python para interagir com agentes de IA da StackSpot, oferecendo uma interface simplificada para criação, gerenciamento e interação com agentes inteligentes.
 
+## 📚 Links Úteis
+
+- [Documentação Oficial da StackSpot](https://docs.stackspot.com/)
+- [Guia de Agentes IA](https://docs.stackspot.com/latest/docs/genai/concepts/agent-intro)
+- [API de Inferência](https://docs.stackspot.com/latest/docs/genai/references/api/inference-api)
+- [API de Upload](https://docs.stackspot.com/latest/docs/genai/references/api/upload-api)
+- [Autenticação OAuth](https://docs.stackspot.com/latest/docs/genai/references/api/auth)
+
 ## 🌟 Características
 
 - 🤖 Criação e gerenciamento de agentes IA
 - 💬 Interface de chat simplificada
 - 🔄 Gerenciamento de sessão e contexto
-- 🔐 Autenticação OAuth integrada
+- � Upload de arquivos via S3 (Novo!)
+- �🔐 Autenticação OAuth integrada
 - 📝 Logging completo de interações
 - ⚙️ Configuração flexível via Dynaconf
 
@@ -23,9 +32,10 @@ pip install -r requirements.txt
 
 ## 🚀 Início Rápido
 
-### Exemplo Simples de Chat
+### Exemplo Simples de Chat com Arquivos
 
 ```python
+from pathlib import Path
 from src.agents.chat import AgentChat
 from src.models.chat_session import ChatSession
 
@@ -40,10 +50,17 @@ chat = AgentChat(
     client_secret="seu_client_secret"
 )
 
-# Faz uma pergunta
+# Lista de arquivos para upload
+files = [
+    Path("documento1.pdf"),
+    Path("documento2.txt")
+]
+
+# Faz uma pergunta incluindo contexto dos arquivos
 response = chat.ask(
-    question="Sua pergunta aqui",
-    context=session.get_context(),  # Mantém contexto da conversa
+    question="Analise os documentos anexados",
+    context=session.get_context(),
+    files=files,
     streaming=False
 )
 
@@ -104,9 +121,12 @@ stackspot_agent_api/
 │   │   └── prompt.py        # Configuração de prompts
 │   └── utils/
 │       ├── api_client.py    # Cliente API REST
-│       └── url_utils.py     # Utilitários de URL
-├── tests/                   # Testes unitários e de integração
-└── examples/               # Exemplos de uso
+│       ├── url_utils.py     # Utilitários de URL
+│       └── file_uploader.py # Upload de arquivos (Novo!)
+├── docs/
+│   └── diagrams.md         # Diagramas de arquitetura
+├── tests/                  # Testes unitários e de integração
+└── examples/              # Exemplos de uso
 ```
 
 ### Classes Principais
@@ -119,6 +139,7 @@ Classe principal para interação com a API da StackSpot:
 - Execução de prompts
 - Gerenciamento de agentes existentes
 - Autenticação OAuth
+- Upload de arquivos (Novo!)
 
 #### AgentChat
 
@@ -127,7 +148,17 @@ Interface simplificada para chat:
 - Interação conversacional
 - Manutenção de contexto
 - Streaming de respostas
+- Upload de arquivos para contexto (Novo!)
 - Integração com conhecimento StackSpot
+
+#### FileUploader (Novo!)
+
+Gerenciamento de uploads:
+
+- Upload seguro via S3
+- Geração de formulários pré-assinados
+- Gerenciamento automático de recursos
+- Upload em lote de múltiplos arquivos
 
 #### ChatSession
 
@@ -150,9 +181,27 @@ stackspot.client_secret = "seu_client_secret"
 stackspot.realm = "seu_realm"
 
 # settings.toml
-[default]
-stackspot.auth_url = "https://idm.stackspot.com"
-stackspot.inference_url = "https://genai-inference-app.stackspot.com/v1"
+[default.stackspot]
+agent_id = "seu_agent_id"
+
+[default.stackspot.auth]
+base_url = "https://idm.stackspot.com"
+api_version = "v1"
+oidc_resource = "oidc"
+oauth_resource = "oauth"
+token_resource = "token"
+
+[default.stackspot.inference]
+base_url = "https://genai-inference-app.stackspot.com"
+api_version = "v1"
+agent_resource = "agent"
+chat_endpoint = "chat"
+
+[default.stackspot.upload]
+base_url = "https://data-integration-api.stackspot.com"
+api_version = "v2"
+file_upload_resource = "file-upload"
+form_endpoint = "form"
 ```
 
 ### Logging
@@ -160,6 +209,15 @@ stackspot.inference_url = "https://genai-inference-app.stackspot.com/v1"
 Os logs são salvos em:
 - `logs/stackspot_{time}.log` - Todos os logs
 - `logs/stackspot_errors_{time}.log` - Apenas erros
+
+## 📐 Arquitetura
+
+Os diagramas abaixo explicam o funcionamento do sistema:
+
+- [Fluxo de Upload de Arquivos](docs/diagrams.md#fluxo-de-upload-de-arquivos)
+- [Arquitetura do Sistema](docs/diagrams.md#arquitetura-do-sistema)
+- [Fluxo de Autenticação](docs/diagrams.md#fluxo-de-autenticação)
+- [Estrutura de Classes](docs/diagrams.md#estrutura-de-classes)
 
 ## 🧪 Testes
 
