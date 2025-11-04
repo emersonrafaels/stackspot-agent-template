@@ -1,0 +1,28 @@
+{
+    "name": "ObrasBudgetGuard",
+    "description": "Assistente de Análise de Orçamentos - Itaú Unibanco",
+    "theme": {
+        "light": {
+            "primary": "#EC7000",
+            "secondary": "#003087",
+            "background": "#FFFFFF",
+            "paper": "#F5F5F5"
+        },
+        "dark": {
+            "primary": "#EC7000",
+            "secondary": "#003087",
+            "background": "#1A1A1A",
+            "paper": "#2D2D2D"
+        }
+    },
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Banco_Ita%C3%BA_logo.svg",
+    "avatar": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Banco_Ita%C3%BA_logo.svg",
+    "favicon": "https://www.itau.com.br/media/favicon/favicon.ico",
+    "hide_cot": false,
+    "default_expand_messages": true,
+    "show_readme": false,
+    "accent_color": "#EC7000",
+    "navigation_color": "#003087",
+    "message_border_radius": "8px",
+    "message_opacity": 1
+}

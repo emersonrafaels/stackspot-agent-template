@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Chainlit App",
+            "type": "python",
+            "request": "launch",
+            "module": "chainlit",
+            "args": ["run", "web/chainlit_app.py", "-w"],
+            "justMyCode": false,
+            "env": {
+                "CHAINLIT_DEBUG": "true",
+                "PYTHONPATH": "${workspaceFolder}"
+            }
+        }
+    ]
+}
