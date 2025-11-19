@@ -91,27 +91,27 @@ class StackSpotAgent:
             result = response.json()
             logger.success(f"Agent created successfully: {result.get('id', 'No ID')}")
             return result
-
         except requests.exceptions.RequestException as e:
             logger.error(f"Error creating agent: {str(e)}")
             raise
-
-    def execute_prompt(self, prompt: str) -> Dict[str, Any]:
+    def execute_prompt(self, prompt: str, context: Optional[list] = None) -> Dict[str, Any]:
         """
-        Execute a prompt with the agent.
+        Execute a prompt with the agent, always sending conversation context.
 
         Args:
             prompt (str): The prompt to execute
+            context (Optional[list]): Conversation context as a list of dicts
 
         Returns:
             Dict[str, Any]: Response from the API
         """
         try:
             logger.info(f"Executing prompt: {prompt[:50]}...")
+            payload = {"prompt": prompt, "context": context or []}
             response = requests.post(
                 f"{self.base_url}/agents/execute",
                 headers=self._headers,
-                json={"prompt": prompt},
+                json=payload,
             )
             response.raise_for_status()
 
@@ -146,6 +146,10 @@ def main():
         # Create the agent
         result = agent.create_agent()
         print(json.dumps(result, indent=2))
+
+        # Example: execute a prompt and include context (empty example context)
+        prompt_result = agent.execute_prompt("Seu prompt aqui", context=[{"role": "user", "content": "Exemplo de contexto"}])
+        print(json.dumps(prompt_result, indent=2))
 
     except Exception as e:
         logger.error(f"Error in main execution: {str(e)}")
