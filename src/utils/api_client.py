@@ -75,15 +75,17 @@ class StackSpotAPIClient:
             logger.error(f"API request failed: {str(e)}")
             raise
 
-    def post(self, endpoint: str, data: dict, access_token: str, files: List[Path] = None) -> Dict[str, Any]:
+    def post(
+        self, endpoint: str, data: dict, access_token: str, files: List[Path] = None
+    ) -> Dict[str, Any]:
         """Make POST request to StackSpot API.
-        
+
         Args:
             endpoint (str): API endpoint
             data (dict): Request data
             access_token (str): OAuth access token
             files (List[Path], optional): List of file paths to upload
-            
+
         Returns:
             Dict[str, Any]: API response
         """
@@ -93,14 +95,14 @@ class StackSpotAPIClient:
 
             if files:
                 from src.utils.file_uploader import FileUploader
-                
+
                 # Upload files and get upload IDs
                 uploader = FileUploader(access_token=access_token)
                 upload_ids = uploader.upload_files(files)
-                
+
                 # Add upload IDs to payload
                 data["upload_ids"] = upload_ids
-            
+
             # Make request with JSON payload
             response = requests.post(url, headers=headers, json=data)
 

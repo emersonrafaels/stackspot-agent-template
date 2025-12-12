@@ -83,9 +83,7 @@ class StackSpotAgent:
             logger.info(f"Creating agent: {self.name}")
             payload = self._create_agent_payload()
 
-            response = requests.post(
-                f"{self.base_url}/agents", headers=self._headers, json=payload
-            )
+            response = requests.post(f"{self.base_url}/agents", headers=self._headers, json=payload)
             response.raise_for_status()
 
             result = response.json()
@@ -94,6 +92,7 @@ class StackSpotAgent:
         except requests.exceptions.RequestException as e:
             logger.error(f"Error creating agent: {str(e)}")
             raise
+
     def execute_prompt(self, prompt: str, context: Optional[list] = None) -> Dict[str, Any]:
         """
         Execute a prompt with the agent, always sending conversation context.
@@ -148,7 +147,9 @@ def main():
         print(json.dumps(result, indent=2))
 
         # Example: execute a prompt and include context (empty example context)
-        prompt_result = agent.execute_prompt("Seu prompt aqui", context=[{"role": "user", "content": "Exemplo de contexto"}])
+        prompt_result = agent.execute_prompt(
+            "Seu prompt aqui", context=[{"role": "user", "content": "Exemplo de contexto"}]
+        )
         print(json.dumps(prompt_result, indent=2))
 
     except Exception as e:

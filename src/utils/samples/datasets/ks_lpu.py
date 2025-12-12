@@ -342,9 +342,7 @@ def generate_price_table() -> pd.DataFrame:
     return pd.DataFrame(price_rows)
 
 
-def save_price_table(
-    df: pd.DataFrame, filename: str = "lpu_vigente_itau_agencia.csv"
-) -> None:
+def save_price_table(df: pd.DataFrame, filename: str = "lpu_vigente_itau_agencia.csv") -> None:
     """
     Saves the price table to a CSV file.
 
@@ -366,15 +364,11 @@ def main():
     logger.info("Starting LPU price table generation process")
     try:
         price_table = generate_price_table()
-        output_file = Path(
-            Path(__file__).parents[0], "ks_lpu_vigente_itau_agencias.csv"
-        )
+        output_file = Path(Path(__file__).parents[0], "ks_lpu_vigente_itau_agencias.csv")
 
         save_price_table(price_table, filename=str(output_file))
 
-        logger.success(
-            f"Successfully generated and saved price table with {len(price_table)} rows"
-        )
+        logger.success(f"Successfully generated and saved price table with {len(price_table)} rows")
     except Exception as e:
         logger.error(f"Error in price table generation process: {str(e)}")
         raise
