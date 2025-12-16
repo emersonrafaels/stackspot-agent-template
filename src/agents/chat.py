@@ -1,6 +1,6 @@
 """Module for chatting with StackSpot agents."""
 
-from typing import Any, Dict, List, Optional, Union
+from typing import List, Optional, Union
 from pathlib import Path
 
 from src.agents.stackspot_agent import StackSpotAgent

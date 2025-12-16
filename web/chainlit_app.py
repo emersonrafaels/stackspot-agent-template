@@ -1,6 +1,5 @@
 import chainlit as cl
 import sys
-import asyncio
 from pathlib import Path
 
 # Adjust import path for data functions
