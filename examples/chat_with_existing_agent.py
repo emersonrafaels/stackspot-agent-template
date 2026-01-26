@@ -1,8 +1,9 @@
 import sys
 from pathlib import Path
 
-# Adjust import path for data functions
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# Adjust the path to import from src directory
+base_dir = Path(__file__).parents[1]
+sys.path.insert(0, str(base_dir))
 
 from src.agents.chat import AgentChat
 from src.config.config_logger import logger
