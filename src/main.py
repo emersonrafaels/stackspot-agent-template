@@ -1,11 +1,22 @@
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 import requests
 
-from src.config import logger
+# Adicionar src ao path
+base_dir = Path(__file__).parents[1]
+sys.path.insert(0, str(base_dir))
+
+from src.agents.chat import AgentChat
+from src.models.chat_session import ChatSession
+from src.models.llm import LLMConfig
+from src.models.prompt import PromptConfig
+from src.config.stackspot_config import get_stackspot_config
+from src.config.config_logger import logger
+from src.config.config_dynaconf import get_settings
 
 
 @dataclass
@@ -94,7 +105,10 @@ class StackSpotAgent:
         except requests.exceptions.RequestException as e:
             logger.error(f"Error creating agent: {str(e)}")
             raise
-    def execute_prompt(self, prompt: str, context: Optional[list] = None) -> Dict[str, Any]:
+
+    def execute_prompt(
+        self, prompt: str, context: Optional[list] = None
+    ) -> Dict[str, Any]:
         """
         Execute a prompt with the agent, always sending conversation context.
 
@@ -124,37 +138,95 @@ class StackSpotAgent:
             raise
 
 
-def main():
-    """Main execution function."""
-    try:
-        # Create agent configuration
-        llm_config = LLMConfig(provider="openai", model="gpt-4o-mini")
+class ChatWithFilesHandler:
+    def __init__(
+        self,
+        agent_id: str,
+        realm: str,
+        client_id: str,
+        client_secret: str,
+        auth_url: str,
+        base_url: str,
+        chat_endpoint: str,
+    ):
+        self.agent_id = agent_id
+        self.realm = realm
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.auth_url = auth_url
+        self.base_url = base_url
+        self.chat_endpoint = chat_endpoint
 
-        prompt_config = PromptConfig(
-            content="Você é um especialista em dados do Itaú, com foco em IBS360, Scorefy e Radar Imobiliário."
+    def initialize_chat(self):
+        """
+        Initialize the chat with files.
+        """
+        session = ChatSession()
+        chat = AgentChat(
+            agent_id=self.agent_id,
+            realm=self.realm,
+            client_id=self.client_id,
+            client_secret=self.client_secret,
+            auth_url=self.auth_url,
+            base_url=self.base_url,
+            chat_endpoint=self.chat_endpoint,
         )
-
-        # Initialize agent
-        agent = StackSpotAgent(
-            api_key="SUA_CHAVE_STACKSPOT",
-            name="Agente IBS360",
-            description="Especialista em dados imobiliários e performance de agências.",
-            llm_config=llm_config,
-            prompt_config=prompt_config,
-        )
-
-        # Create the agent
-        result = agent.create_agent()
-        print(json.dumps(result, indent=2))
-
-        # Example: execute a prompt and include context (empty example context)
-        prompt_result = agent.execute_prompt("Seu prompt aqui", context=[{"role": "user", "content": "Exemplo de contexto"}])
-        print(json.dumps(prompt_result, indent=2))
-
-    except Exception as e:
-        logger.error(f"Error in main execution: {str(e)}")
-        raise
+        print("Chat with files initialized.")
 
 
-if __name__ == "__main__":
-    main()
+# Example usage
+# settings = get_settings()
+# stackspot_config = get_stackspot_config()
+# handler = ChatWithFilesHandler(
+#     agent_id=stackspot_config.get("agent_id"),
+#     realm=stackspot_config.get("realm"),
+#     client_id=stackspot_config.get("client_id"),
+#     client_secret=stackspot_config.get("client_secret"),
+#     auth_url=stackspot_config.get("auth_url"),
+#     base_url=stackspot_config.get("inference_url"),
+#     chat_endpoint=settings.get("stackspot.inference.chat_endpoint"),
+# )
+# handler.initialize_chat()
+
+
+def chat():
+    """
+    Function to handle chat functionality.
+    """
+    settings = get_settings()
+    stackspot_config = get_stackspot_config()
+    session = ChatSession()
+    chat = AgentChat(
+        agent_id=stackspot_config.get("agent_id"),
+        realm=stackspot_config.get("realm"),
+        client_id=stackspot_config.get("client_id"),
+        client_secret=stackspot_config.get("client_secret"),
+        auth_url=stackspot_config.get("auth_url"),
+        base_url=stackspot_config.get("inference_url"),
+        chat_endpoint=settings.get("stackspot.inference.chat_endpoint"),
+    )
+    print("Chat initialized.")
+
+
+def create_agent():
+    """
+    Function to create an agent.
+    """
+    settings = get_settings()
+    llm_config = LLMConfig(provider="openai", model="gpt-4o-mini")
+    prompt_config = PromptConfig(content="Hello, I am a StackSpot agent!")
+    agent = StackSpotAgent(
+        name="Example Agent",
+        description="A simple example agent",
+        llm_config=llm_config,
+        prompt_config=prompt_config,
+        client_id=settings.get("stackspot_client_id"),
+        client_secret=settings.get("stackspot_client_secret"),
+        realm=settings.get("stackspot_realm"),
+    )
+    agent.create()
+    print("Agent created.")
+
+
+# Expose the functions for external calls
+__all__ = ["chat_with_files", "chat", "create_agent"]

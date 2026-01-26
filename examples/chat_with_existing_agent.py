@@ -13,6 +13,7 @@ from src.models.chat_session import ChatSession
 # Retrieve settings instance
 settings = get_settings()
 
+
 def main():
     """Run chat example."""
     try:
@@ -22,10 +23,10 @@ def main():
 
         # Get configuration from settings
         stackspot_config = get_stackspot_config()
-        
+
         # Initialize chat session
         session = ChatSession()
-        
+
         # Initialize chat with agent
         chat = AgentChat(
             agent_id=stackspot_config.get("agent_id"),
@@ -34,7 +35,7 @@ def main():
             client_secret=stackspot_config.get("client_secret"),
             auth_url=stackspot_config.get("auth_url"),
             base_url=stackspot_config.get("inference_url"),
-            chat_endpoint=settings.get("stackspot.inference.chat_endpoint")
+            chat_endpoint=settings.get("stackspot.inference.chat_endpoint"),
         )
 
         print("\nChat iniciado! Digite 'sair' para encerrar.")
@@ -72,7 +73,7 @@ def main():
                     context=session.get_context(),
                     streaming=False,
                     use_stackspot_docs=True,
-                    return_ks_in_response=False
+                    return_ks_in_response=False,
                 )
 
                 # Add assistant response to session

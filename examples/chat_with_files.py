@@ -1,4 +1,5 @@
 """Example of chatting with an existing agent using file upload."""
+
 import sys
 from pathlib import Path
 
@@ -14,6 +15,7 @@ from src.models.chat_session import ChatSession
 # Retrieve settings instance
 settings = get_settings()
 
+
 def main():
     """Run chat example with file upload."""
     try:
@@ -23,10 +25,10 @@ def main():
 
         # Get configuration from settings
         stackspot_config = get_stackspot_config()
-        
+
         # Initialize chat session
         session = ChatSession()
-        
+
         # Initialize chat with agent
         chat = AgentChat(
             agent_id=stackspot_config.get("agent_id"),
@@ -35,7 +37,7 @@ def main():
             client_secret=stackspot_config.get("client_secret"),
             auth_url=stackspot_config.get("auth_url"),
             base_url=stackspot_config.get("inference_url"),
-            chat_endpoint=settings.get("stackspot.inference.chat_endpoint")
+            chat_endpoint=settings.get("stackspot.inference.chat_endpoint"),
         )
 
         print("\nChat iniciado! Digite 'sair' para encerrar.")
@@ -70,24 +72,24 @@ def main():
                     print("\nUpload de arquivos")
                     print("Digite os caminhos dos arquivos (um por linha)")
                     print("Digite uma linha vazia para finalizar")
-                    
+
                     while True:
                         file_path = input("Arquivo: ").strip()
                         if not file_path:
                             break
-                            
+
                         path = Path(file_path)
                         if not path.exists():
                             print(f"Arquivo não encontrado: {file_path}")
                             continue
-                            
+
                         files.append(path)
                         print(f"Arquivo adicionado: {path.name}")
-                    
+
                     if not files:
                         print("Nenhum arquivo foi adicionado.")
                         continue
-                        
+
                     question = input("\nQual sua pergunta sobre os arquivos? ")
 
                 # Add user message to session
@@ -100,7 +102,7 @@ def main():
                     streaming=False,
                     use_stackspot_docs=True,
                     return_ks_in_response=False,
-                    files=files if files else None
+                    files=files if files else None,
                 )
 
                 # Add assistant response to session
@@ -122,6 +124,7 @@ def main():
     except Exception as e:
         logger.error(f"Erro fatal: {e}")
         print(f"Erro: {e}")
+
 
 if __name__ == "__main__":
     main()
