@@ -1,7 +1,12 @@
 """Module for chatting with StackSpot agents."""
 
+import sys
 from typing import List, Optional, Union
 from pathlib import Path
+
+# Adjust the path to import from src directory
+base_dir = Path(__file__).parents[2]
+sys.path.insert(0, str(base_dir))
 
 from src.agents.stackspot_agent import StackSpotAgent
 from src.config.config_logger import logger
