@@ -204,7 +204,7 @@ def create_agent():
         prompt_config=prompt_config,
         client_id=settings.get("stackspot_client_id"),
         client_secret=settings.get("stackspot_client_secret"),
-        realm=settings.get("stackspot_realm"),
+        realm=settings.get("stackspot.realm"),
     )
     agent.create()
     print("Agent created.")

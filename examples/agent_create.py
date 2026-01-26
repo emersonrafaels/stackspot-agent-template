@@ -27,7 +27,7 @@ def run_example():
         prompt_config=system_prompt_config,
         client_id=settings.get("stackspot_client_id"),
         client_secret=settings.get("stackspot_client_secret"),
-        realm=settings.get("stackspot_realm"),
+        realm=settings.get("stackspot.realm"),
     )
 
     # Create and execute
