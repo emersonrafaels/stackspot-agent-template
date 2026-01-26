@@ -103,13 +103,9 @@ class StackSpotAgent:
             logger.error(f"Error creating agent: {str(e)}")
             raise
 
-<<<<<<< HEAD
     def execute_prompt(
         self, prompt: str, context: Optional[list] = None
     ) -> Dict[str, Any]:
-=======
-    def execute_prompt(self, prompt: str, context: Optional[list] = None) -> Dict[str, Any]:
->>>>>>> 1bb1b9f912534824af7c6fbcf527307b0ec830a0
         """
         Execute a prompt with the agent, always sending conversation context.
 
@@ -172,48 +168,7 @@ class ChatWithFilesHandler:
             base_url=self.base_url,
             chat_endpoint=self.chat_endpoint,
         )
-<<<<<<< HEAD
         print("Chat with files initialized.")
-=======
-
-        # Initialize agent
-        agent = StackSpotAgent(
-            api_key="SUA_CHAVE_STACKSPOT",
-            name="Agente IBS360",
-            description="Especialista em dados imobiliários e performance de agências.",
-            llm_config=llm_config,
-            prompt_config=prompt_config,
-        )
-
-        # Create the agent
-        result = agent.create_agent()
-        print(json.dumps(result, indent=2))
-
-        # Example: execute a prompt and include context (empty example context)
-        prompt_result = agent.execute_prompt(
-            "Seu prompt aqui", context=[{"role": "user", "content": "Exemplo de contexto"}]
-        )
-        print(json.dumps(prompt_result, indent=2))
-
-    except Exception as e:
-        logger.error(f"Error in main execution: {str(e)}")
-        raise
->>>>>>> 1bb1b9f912534824af7c6fbcf527307b0ec830a0
-
-
-# Example usage
-# settings = get_settings()
-# stackspot_config = get_stackspot_config()
-# handler = ChatWithFilesHandler(
-#     agent_id=stackspot_config.get("agent_id"),
-#     realm=stackspot_config.get("realm"),
-#     client_id=stackspot_config.get("client_id"),
-#     client_secret=stackspot_config.get("client_secret"),
-#     auth_url=stackspot_config.get("auth_url"),
-#     base_url=stackspot_config.get("inference_url"),
-#     chat_endpoint=settings.get("stackspot.inference.chat_endpoint"),
-# )
-# handler.initialize_chat()
 
 
 def chat():
