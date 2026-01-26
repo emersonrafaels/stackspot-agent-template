@@ -1,7 +1,6 @@
 import json
 import sys
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Dict, Optional
 
 import requests
@@ -94,9 +93,7 @@ class StackSpotAgent:
             logger.info(f"Creating agent: {self.name}")
             payload = self._create_agent_payload()
 
-            response = requests.post(
-                f"{self.base_url}/agents", headers=self._headers, json=payload
-            )
+            response = requests.post(f"{self.base_url}/agents", headers=self._headers, json=payload)
             response.raise_for_status()
 
             result = response.json()
@@ -106,9 +103,13 @@ class StackSpotAgent:
             logger.error(f"Error creating agent: {str(e)}")
             raise
 
+<<<<<<< HEAD
     def execute_prompt(
         self, prompt: str, context: Optional[list] = None
     ) -> Dict[str, Any]:
+=======
+    def execute_prompt(self, prompt: str, context: Optional[list] = None) -> Dict[str, Any]:
+>>>>>>> 1bb1b9f912534824af7c6fbcf527307b0ec830a0
         """
         Execute a prompt with the agent, always sending conversation context.
 
@@ -171,7 +172,33 @@ class ChatWithFilesHandler:
             base_url=self.base_url,
             chat_endpoint=self.chat_endpoint,
         )
+<<<<<<< HEAD
         print("Chat with files initialized.")
+=======
+
+        # Initialize agent
+        agent = StackSpotAgent(
+            api_key="SUA_CHAVE_STACKSPOT",
+            name="Agente IBS360",
+            description="Especialista em dados imobiliários e performance de agências.",
+            llm_config=llm_config,
+            prompt_config=prompt_config,
+        )
+
+        # Create the agent
+        result = agent.create_agent()
+        print(json.dumps(result, indent=2))
+
+        # Example: execute a prompt and include context (empty example context)
+        prompt_result = agent.execute_prompt(
+            "Seu prompt aqui", context=[{"role": "user", "content": "Exemplo de contexto"}]
+        )
+        print(json.dumps(prompt_result, indent=2))
+
+    except Exception as e:
+        logger.error(f"Error in main execution: {str(e)}")
+        raise
+>>>>>>> 1bb1b9f912534824af7c6fbcf527307b0ec830a0
 
 
 # Example usage

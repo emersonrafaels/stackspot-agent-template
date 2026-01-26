@@ -3,7 +3,6 @@
 import sys
 from functools import lru_cache
 from pathlib import Path
-from typing import Optional
 
 # Adjust import path for data functions
 sys.path.insert(0, str(Path(__file__).parents[2]))
@@ -33,14 +32,12 @@ def get_stackspot_config() -> dict:
 
     # Build inference URL
     inference_url = build_url(
-        settings.get(
-            "stackspot.inference.base_url", "https://genai-inference-app.stackspot.com"
-        ),
+        settings.get("stackspot.inference.base_url", "https://genai-inference-app.stackspot.com"),
         settings.get("stackspot.inference.api_version", "v1"),
         settings.get("stackspot.inference.agent_resource", "agent"),
         settings.get("stackspot.agent_id"),
     )
-    
+
     # Get agent id
     agent_id = settings.get("stackspot.agent_id")
     if not agent_id:

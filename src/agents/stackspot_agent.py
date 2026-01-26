@@ -56,19 +56,13 @@ class StackSpotAgent(BaseAgent):
         auth_url = auth_url or stackspot_config.get("auth_url")
 
         # Initialize API client and get OAuth token
-        self.api_client = StackSpotAPIClient(
-            base_url=inference_url,
-            auth_url=auth_url,
-            realm=realm
-        )
+        self.api_client = StackSpotAPIClient(base_url=inference_url, auth_url=auth_url, realm=realm)
 
         # Get OAuth token
         self.access_token = self.api_client.get_oauth_token(
-            url=auth_url,
-            client_id=client_id,
-            client_secret=client_secret
+            url=auth_url, client_id=client_id, client_secret=client_secret
         )
-        
+
         # Set endpoint for agent operations
         self.endpoint = endpoint or "chat"
 
@@ -98,7 +92,7 @@ class StackSpotAgent(BaseAgent):
         streaming: bool = True,
         use_stackspot_knowledge: bool = True,
         return_ks_in_response: bool = False,
-        files: List[Path] = None
+        files: List[Path] = None,
     ) -> Dict[str, Any]:
         """Execute a prompt with the agent.
 
@@ -120,10 +114,7 @@ class StackSpotAgent(BaseAgent):
                 "return_ks_in_response": return_ks_in_response,
             }
             result = self.api_client.post(
-                endpoint=self.endpoint,
-                data=payload,
-                access_token=self.access_token,
-                files=files
+                endpoint=self.endpoint, data=payload, access_token=self.access_token, files=files
             )
             logger.success("Prompt executed successfully")
             return result
@@ -135,9 +126,7 @@ class StackSpotAgent(BaseAgent):
         """List all agents."""
         try:
             logger.info("Listing all agents...")
-            result = self.api_client.get(
-                endpoint="agents", access_token=self.access_token
-            )
+            result = self.api_client.get(endpoint="agents", access_token=self.access_token)
             logger.success("Agents listed successfully")
             return result
         except Exception as e:

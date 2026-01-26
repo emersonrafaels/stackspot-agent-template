@@ -5,7 +5,7 @@ from typing import Dict, Any
 @dataclass
 class LLMConfig:
     """Configuration for the Language Model.
-    
+
     Args:
         provider (str): The LLM provider name
         model (str): The model name/identifier
@@ -38,5 +38,5 @@ class LLMConfig:
             "temperature": self.temperature,
             "top_p": self.top_p,
             "frequency_penalty": self.frequency_penalty,
-            "presence_penalty": self.presence_penalty
+            "presence_penalty": self.presence_penalty,
         }

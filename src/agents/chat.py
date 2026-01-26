@@ -1,5 +1,6 @@
 """Module for chatting with StackSpot agents."""
-from typing import Any, Dict, List, Optional, Union
+
+from typing import List, Optional, Union
 from pathlib import Path
 
 from src.agents.stackspot_agent import StackSpotAgent
@@ -10,7 +11,7 @@ from src.models.prompt import PromptConfig
 
 class AgentChat(StackSpotAgent):
     """Simple interface for chatting with StackSpot agents.
-    
+
     Extends StackSpotAgent to provide a simpler interface focused on chat interactions.
     """
 
@@ -22,7 +23,7 @@ class AgentChat(StackSpotAgent):
         client_secret: str = None,
         auth_url: str = None,
         base_url: str = None,
-        chat_endpoint: str = None
+        chat_endpoint: str = None,
     ):
         """Initialize chat with an existing agent.
 
@@ -44,7 +45,7 @@ class AgentChat(StackSpotAgent):
         dummy_prompt = PromptConfig(
             content="",
         )
-        
+
         # Initialize parent class with existing agent ID as name
         super().__init__(
             name=agent_id,  # Use agent_id as name for API paths
@@ -56,17 +57,17 @@ class AgentChat(StackSpotAgent):
             realm=realm,
             auth_url=auth_url,
             base_url=base_url,
-            endpoint=chat_endpoint
+            endpoint=chat_endpoint,
         )
 
     def ask(
-        self, 
+        self,
         question: str,
         context: Optional[list] = None,
         streaming: bool = True,
         use_stackspot_docs: bool = True,
         return_ks_in_response: bool = True,
-        files: List[Union[str, Path]] = None
+        files: List[Union[str, Path]] = None,
     ) -> str:
         """Send a question to the agent.
 
@@ -85,7 +86,7 @@ class AgentChat(StackSpotAgent):
             # Convert any string paths to Path objects
             if files:
                 files = [Path(f) if isinstance(f, str) else f for f in files]
-            
+
             # Use parent's execute method with simplified interface
             response = self.execute(
                 prompt=question,
@@ -93,9 +94,9 @@ class AgentChat(StackSpotAgent):
                 streaming=streaming,
                 use_stackspot_knowledge=use_stackspot_docs,
                 return_ks_in_response=return_ks_in_response,
-                files=files
+                files=files,
             )
-            
+
             # Extract just the response text
             answer = response.get("message", "")
             return answer

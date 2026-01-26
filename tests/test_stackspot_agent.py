@@ -1,5 +1,3 @@
-import pytest
-
 from src.agents.stackspot_agent import StackSpotAgent
 from src.models.llm import LLMConfig
 from src.models.prompt import PromptConfig
