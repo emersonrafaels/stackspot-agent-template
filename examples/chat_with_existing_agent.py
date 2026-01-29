@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from pprint import pprint
 
 # Adjust the path to import from src directory
 base_dir = Path(__file__).parents[1]
@@ -69,11 +70,15 @@ def main(agent_id: str = None,
                     use_stackspot_docs=True,
                     return_ks_in_response=False,
                 )
+                
+                # Get message from response
+                message = answer.get("message", "")
 
                 # Add assistant response to session
-                session.add_message("assistant", answer)
-                print(f"\nResposta: {answer}")
-
+                session.add_message("assistant", message)
+                pprint(f"\nResposta: {answer}")
+                print(f"\Mensagem: {message}")
+                
             except KeyboardInterrupt:
                 break
 
@@ -92,7 +97,7 @@ def main(agent_id: str = None,
 
 if __name__ == "__main__":
     
-    agent_id = "01K8F6PDXR3RQKFKBQTJ8D1Z7Y"
+    agent_id = "01KFJ78NYVJSY8YS5A681Q5XT5"
     realm = "stackspot-freemium"
     client_id = "5ebf7401-29fc-494c-b7e4-ec59f2518077"
     client_secret = "7ty3d1ef3bhbj6k6Dq5Ez14xa7x6vCSK6xKkVSYkaDCbEQ788ut2C4CPq5Pg6i9p"

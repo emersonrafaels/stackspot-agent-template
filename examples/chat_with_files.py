@@ -97,9 +97,12 @@ def main(agent_id: str = None,
                     files=files if files else None,
                 )
 
+                # Get message from response
+                message = answer.get("message", "")
+
                 # Add assistant response to session
-                session.add_message("assistant", answer)
-                print(f"\nResposta: {answer}")
+                session.add_message("assistant", message)
+                print(f"\nResposta: {message}")
 
             except KeyboardInterrupt:
                 break
@@ -119,7 +122,7 @@ def main(agent_id: str = None,
 
 if __name__ == "__main__":
     
-    agent_id = "01K8F6PDXR3RQKFKBQTJ8D1Z7Y"
+    agent_id = "01KFJ78NYVJSY8YS5A681Q5XT5"
     realm = "stackspot-freemium"
     client_id = "5ebf7401-29fc-494c-b7e4-ec59f2518077"
     client_secret = "7ty3d1ef3bhbj6k6Dq5Ez14xa7x6vCSK6xKkVSYkaDCbEQ788ut2C4CPq5Pg6i9p"

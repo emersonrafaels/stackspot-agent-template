@@ -82,10 +82,8 @@ class AgentChat(StackSpotAgent):
                 files=files,
             )
 
-            # Extract just the response text
-            answer = response.get("message", "")
-            return answer
+            # Return all response content as a string
+            return response
 
         except Exception as e:
             logger.error(f"Failed to get response: {str(e)}")
-            raise
