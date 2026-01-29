@@ -4,7 +4,7 @@ from pprint import pprint
 from typing import List, Union
 
 # Adjust the path to import from src directory
-base_dir = Path(__file__).parents[1]
+base_dir = Path(__file__).parents[2]
 sys.path.insert(0, str(base_dir))
 
 from src.agents.chat import AgentChat
