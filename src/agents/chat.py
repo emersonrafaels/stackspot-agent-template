@@ -83,7 +83,8 @@ class AgentChat(StackSpotAgent):
             )
 
             # Return all response content as a string
-            return response
+            return response if isinstance(response, (dict)) else {}
 
         except Exception as e:
             logger.error(f"Failed to get response: {str(e)}")
+            return {}
