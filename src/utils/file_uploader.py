@@ -7,13 +7,7 @@ import json
 import requests
 
 from src.config.config_logger import logger
-from src.config.config_dynaconf import get_settings
 from src.config.stackspot_config import get_stackspot_config
-from src.utils.url_utils import build_url
-
-# Get configuration
-settings = get_settings()
-stackspot_config = get_stackspot_config()
 
 
 class FileUploader:
@@ -28,14 +22,10 @@ class FileUploader:
         """
         self.access_token = access_token
         self.account_id = account_id
+        
+        stackspot_config = get_stackspot_config()
 
-        # Build upload API URL from settings
-        base_url = settings.get("stackspot.upload.base_url")
-        api_version = settings.get("stackspot.upload.api_version")
-        file_upload_resource = settings.get("stackspot.upload.file_upload_resource")
-        form_endpoint = settings.get("stackspot.upload.form_endpoint")
-
-        self.upload_api = build_url(base_url, api_version, file_upload_resource, form_endpoint)
+        self.upload_api = stackspot_config.get("upload_url")
 
     def _create_headers(self) -> Dict[str, str]:
         """Create request headers with authentication."""

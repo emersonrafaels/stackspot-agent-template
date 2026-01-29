@@ -1,43 +1,35 @@
-"""Example of chatting with an existing agent using file upload."""
-
 import sys
 from pathlib import Path
 
-# Adjust import path for data functions
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+# Adjust the path to import from src directory
+base_dir = Path(__file__).parents[1]
+sys.path.insert(0, str(base_dir))
 
 from src.agents.chat import AgentChat
-from src.config.config_logger import logger
-from src.config.config_dynaconf import get_settings
-from src.config.stackspot_config import get_stackspot_config
 from src.models.chat_session import ChatSession
 
-# Retrieve settings instance
-settings = get_settings()
 
-
-def main():
+def main(agent_id: str = None,
+         realm: str = None, 
+         client_id: str = None,
+         client_secret: str = None):
+    
     """Run chat example with file upload."""
+    
     try:
         print("StackSpot Chat com Upload de Arquivos")
         print("------------------------------------")
         print("Carregando configurações...")
-
-        # Get configuration from settings
-        stackspot_config = get_stackspot_config()
 
         # Initialize chat session
         session = ChatSession()
 
         # Initialize chat with agent
         chat = AgentChat(
-            agent_id=stackspot_config.get("agent_id"),
-            realm=stackspot_config.get("realm"),
-            client_id=stackspot_config.get("client_id"),
-            client_secret=stackspot_config.get("client_secret"),
-            auth_url=stackspot_config.get("auth_url"),
-            base_url=stackspot_config.get("inference_url"),
-            chat_endpoint=settings.get("stackspot.inference.chat_endpoint"),
+            agent_id=agent_id,
+            realm=realm,
+            client_id=client_id,
+            client_secret=client_secret
         )
 
         print("\nChat iniciado! Digite 'sair' para encerrar.")
@@ -113,7 +105,7 @@ def main():
                 break
 
             except Exception as e:
-                logger.error(f"Erro: {e}")
+                print(f"Erro: {e}")
                 print("Erro ao processar pergunta. Tente novamente.")
 
         print("\nChat encerrado!")
@@ -122,9 +114,17 @@ def main():
         print("\nOperação cancelada pelo usuário.")
 
     except Exception as e:
-        logger.error(f"Erro fatal: {e}")
         print(f"Erro: {e}")
 
 
 if __name__ == "__main__":
-    main()
+    
+    agent_id = "01K8F6PDXR3RQKFKBQTJ8D1Z7Y"
+    realm = "stackspot-freemium"
+    client_id = "5ebf7401-29fc-494c-b7e4-ec59f2518077"
+    client_secret = "7ty3d1ef3bhbj6k6Dq5Ez14xa7x6vCSK6xKkVSYkaDCbEQ788ut2C4CPq5Pg6i9p"
+    
+    main(agent_id=agent_id,
+         realm=realm, 
+         client_id=client_id, 
+         client_secret=client_secret)

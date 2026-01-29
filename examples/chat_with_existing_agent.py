@@ -12,8 +12,10 @@ from src.models.chat_session import ChatSession
 def main(agent_id: str = None,
          realm: str = None, 
          client_id: str = None,
-         client_secret: str = None,):
+         client_secret: str = None):
+    
     """Run chat example."""
+    
     try:
         print("StackSpot Chat")
         print("-------------")
