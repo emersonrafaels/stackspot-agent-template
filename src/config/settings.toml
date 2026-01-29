@@ -1,7 +1,6 @@
 [default]
 
 [default.stackspot]
-agent_id = "01K950EYCETA9KX9XBMNNAHE49"
 realm = "stackspot-freemium"
 
 [default.stackspot.auth]
