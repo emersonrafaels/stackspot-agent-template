@@ -6,7 +6,6 @@ base_dir = Path(__file__).parents[1]
 sys.path.insert(0, str(base_dir))
 
 from src.agents.chat import AgentChat
-from src.config.config_logger import logger
 from src.models.chat_session import ChatSession
 
 
@@ -77,7 +76,7 @@ def main(agent_id: str = None,
                 break
 
             except Exception as e:
-                logger.error(f"Erro: {e}")
+                print(f"Erro: {e}")
                 print("Erro ao processar pergunta. Tente novamente.")
 
         print("\nChat encerrado!")
@@ -86,7 +85,6 @@ def main(agent_id: str = None,
         print("\nOperação cancelada pelo usuário.")
 
     except Exception as e:
-        logger.error(f"Erro fatal: {e}")
         print(f"Erro: {e}")
 
 

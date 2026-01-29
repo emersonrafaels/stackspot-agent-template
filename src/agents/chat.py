@@ -42,6 +42,7 @@ class AgentChat(StackSpotAgent):
             realm=realm,
             client_id=client_id,
             client_secret=client_secret,
+            endpoint="chat",
         )
 
     def ask(

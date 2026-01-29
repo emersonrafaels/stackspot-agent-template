@@ -19,25 +19,22 @@ class StackSpotAgent(BaseAgent):
     def __init__(
         self,
         agent_id: str,
+        realm: str,
         client_id: str,
         client_secret: str,
-        realm: str,
+        endpoint: str = "chat",
     ):
         """Initialize StackSpot Agent.
 
         Args:
-            name (str): Agent name
-            description (str): Agent description
-            llm_config (LLMConfig): LLM configuration
-            prompt_config (PromptConfig): Prompt configuration
+            agent_id (str): Unique identifier for the agent
+            realm (str): Account realm for authentication
             client_id (str): OAuth client ID
             client_secret (str): OAuth client secret
-            realm (str): Account realm for authentication
-            auth_url (str, optional): Auth URL for token. Defaults from settings.
-            base_url (str, optional): Base inference API URL. Defaults from settings.
             endpoint (str, optional): API endpoint for agent operations. Defaults to None.
         """
         
+        # Store agent ID
         self.agent_id = agent_id
         
         # Retrieve settings instance
@@ -48,8 +45,8 @@ class StackSpotAgent(BaseAgent):
         )
 
         # Get base URLs from settings if not provided
-        inference_url = base_url or stackspot_config.get("inference_url")
-        auth_url = auth_url or stackspot_config.get("auth_url")
+        inference_url = stackspot_config.get("inference_url")
+        auth_url = stackspot_config.get("auth_url")
 
         # Initialize API client and get OAuth token
         self.api_client = StackSpotAPIClient(base_url=inference_url, auth_url=auth_url, realm=realm)
