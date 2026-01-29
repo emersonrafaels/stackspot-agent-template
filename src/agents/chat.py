@@ -8,7 +8,7 @@ from pathlib import Path
 base_dir = Path(__file__).parents[2]
 sys.path.insert(0, str(base_dir))
 
-from agents.stackspot_agent_chat import StackSpotAgent
+from src.agents.stackspot_agent_chat import StackSpotAgent
 from src.config.config_logger import logger
 from src.models.llm import LLMConfig
 from src.models.prompt import PromptConfig
