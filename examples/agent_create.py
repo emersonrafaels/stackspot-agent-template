@@ -4,7 +4,7 @@ from pathlib import Path
 # Adjust import path for data functions
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from src.agents.stackspot_agent import StackSpotAgent
+from agents.stackspot_agent_create import StackSpotAgent
 from src.config.config_dynaconf import get_settings
 from src.models.llm import LLMConfig
 from src.models.prompt import PromptConfig

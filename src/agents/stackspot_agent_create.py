@@ -12,9 +12,6 @@ from src.utils.api_client import StackSpotAPIClient
 # Retrieve settings instance
 settings = get_settings()
 
-# Retrieve settings instance
-stackspot_config = get_stackspot_config()
-
 
 class StackSpotAgent(BaseAgent):
     """Implementation of StackSpot AI agent."""
@@ -50,6 +47,13 @@ class StackSpotAgent(BaseAgent):
         self.description = description
         self.llm = llm_config
         self.prompt = prompt_config
+        
+        # Retrieve settings instance
+        stackspot_config = get_stackspot_config(
+            agent_id=name,
+            client_id=client_id,
+            client_secret=client_secret
+        )
 
         # Get base URLs from settings if not provided
         inference_url = base_url or stackspot_config.get("inference_url")
@@ -179,3 +183,13 @@ class StackSpotAgent(BaseAgent):
         except Exception as e:
             logger.error(f"Error deleting agent: {str(e)}")
             raise
+
+# Create dummy configs since we're using an existing agent
+dummy_llm = LLMConfig(
+    provider="openai",
+    model="gpt-4o-mini",
+    temperature=0,
+)
+dummy_prompt = PromptConfig(
+    content="",
+)

@@ -1,29 +1,43 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "stackspot-agent-api"
-version = "0.1.0"
-description = ""
-authors = [
-    {name = "Emerson Rafael",email = "emersona7x@hotmail.com"}
-]
+version = "0.0.1"
+description = "API for StackSpot Agent interactions"
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "fastapi (>=0.120.0,<0.121.0)",
-    "python-dotenv (>=1.2.1,<2.0.0)",
-    "dynaconf (>=3.2.12,<4.0.0)",
-    "pandas (>=2.3.3,<3.0.0)"
-]
+requires-python = ">=3.10"
+dependencies = ["dynaconf", "pydantic", "loguru", "requests"]
 
-[tool.poetry]
-packages = [{include = "stackspot_agent_api", from = "src"}]
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[dependency-groups]
+[project.optional-dependencies]
+api = ["fastapi", "uvicorn[standard]"]
 dev = [
-    "pytest (>=8.4.2,<9.0.0)",
-    "black (>=25.9.0,<26.0.0)",
-    "ipykernel (>=7.1.0,<8.0.0)"
+  "pytest",
+  "ruff",
+  "black"
 ]
+
+[project.scripts]
+stackspot-agent-api = "stackspot_agent_api.app:chat"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

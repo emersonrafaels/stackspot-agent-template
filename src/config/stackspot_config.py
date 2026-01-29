@@ -12,8 +12,17 @@ from src.utils.url_utils import build_url
 
 
 @lru_cache()
-def get_stackspot_config() -> dict:
+def get_stackspot_config(agent_id: str = None, 
+                         realm: str = None,
+                         client_id: str = None, 
+                         client_secret: str = None) -> dict:
     """Get StackSpot configuration from settings.
+    
+    # Args:
+        agent_id (str, optional): Specific agent ID. Defaults to None.
+        client_id (str, optional): Specific client ID. Defaults to None.
+        client_secret (str, optional): Specific client secret. Defaults to None.
+        realm (str, optional): Specific realm. Defaults to None.
 
     Returns:
         dict: Dictionary with StackSpot configuration
@@ -35,24 +44,19 @@ def get_stackspot_config() -> dict:
         settings.get("stackspot.inference.base_url", "https://genai-inference-app.stackspot.com"),
         settings.get("stackspot.inference.api_version", "v1"),
         settings.get("stackspot.inference.agent_resource", "agent"),
-        settings.get("stackspot.agent_id"),
+        agent_id,
     )
 
-    # Get agent id
-    agent_id = settings.get("stackspot.agent_id")
-    if not agent_id:
-        raise ValueError("Missing required setting: stackspot.agent_id")
-
     # Get credentials with validation
-    realm = settings.get("stackspot.realm")
+    realm = realm if realm else settings.get("stackspot.realm")
     if not realm:
         raise ValueError("Missing required setting: stackspot.realm")
 
-    client_id = settings.get("stackspot_client_id")
+    client_id = client_id
     if not client_id:
         raise ValueError("Missing required setting: stackspot.client_id")
 
-    client_secret = settings.get("stackspot_client_secret")
+    client_secret = client_secret
     if not client_secret:
         raise ValueError("Missing required setting: stackspot.client_secret")
 

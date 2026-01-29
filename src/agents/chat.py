@@ -8,7 +8,7 @@ from pathlib import Path
 base_dir = Path(__file__).parents[2]
 sys.path.insert(0, str(base_dir))
 
-from src.agents.stackspot_agent import StackSpotAgent
+from agents.stackspot_agent_chat import StackSpotAgent
 from src.config.config_logger import logger
 from src.models.llm import LLMConfig
 from src.models.prompt import PromptConfig
@@ -26,43 +26,22 @@ class AgentChat(StackSpotAgent):
         realm: str = None,
         client_id: str = None,
         client_secret: str = None,
-        auth_url: str = None,
-        base_url: str = None,
-        chat_endpoint: str = None,
     ):
         """Initialize chat with an existing agent.
 
         Args:
             agent_id (str): ID of the existing agent
             realm (str, optional): StackSpot realm. Defaults from settings.
-            client_id (str, optional): OAuth client ID. Defaults from settings.
-            client_secret (str, optional): OAuth client secret. Defaults from settings.
-            auth_url (str, optional): Auth URL. Defaults from settings.
-            base_url (str, optional): Base API URL. Defaults from settings.
-            chat_endpoint (str, optional): Chat endpoint. Defaults from settings.
+            client_id (str, optional): OAuth client ID.
+            client_secret (str, optional): OAuth client secret.
         """
-        # Create dummy configs since we're using an existing agent
-        dummy_llm = LLMConfig(
-            provider="openai",
-            model="gpt-4o-mini",
-            temperature=0,
-        )
-        dummy_prompt = PromptConfig(
-            content="",
-        )
 
         # Initialize parent class with existing agent ID as name
         super().__init__(
-            name=agent_id,  # Use agent_id as name for API paths
-            description="Existing agent",
-            llm_config=dummy_llm,
-            prompt_config=dummy_prompt,
+            agent_id=agent_id,
+            realm=realm,
             client_id=client_id,
             client_secret=client_secret,
-            realm=realm,
-            auth_url=auth_url,
-            base_url=base_url,
-            endpoint=chat_endpoint,
         )
 
     def ask(
