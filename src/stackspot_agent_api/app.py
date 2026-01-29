@@ -18,7 +18,10 @@ def chat(agent_id: str = None,
          question: str = "", 
          files: List[Union[str, Path]] = None):
     
-    """Run chat example."""
+    # Iniciando as variáveis
+    session = None
+    answer = None
+    message = None
     
     try:
         print("StackSpot Chat")
@@ -57,12 +60,20 @@ def chat(agent_id: str = None,
 
         # Add assistant response to session
         session.add_message("assistant", message)
-        pprint(f"\nResposta: {answer}")
-        print(f"\Mensagem: {message}")
+        
+        return {
+            "session": session,
+            "answer": answer,
+            "message": message
+        }
         
 
     except Exception as e:
         print(f"Erro: {e}")
         print("Erro ao processar pergunta. Tente novamente.")
 
-        print("\nChat encerrado!")
+        return {
+            "session": session,
+            "answer": answer,
+            "message": message
+        }
