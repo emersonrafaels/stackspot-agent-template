@@ -20,7 +20,7 @@ def chat(agent_id: str = None,
     
     # Iniciando as variáveis
     session = None
-    answer = None
+    response = None
     message = None
     
     try:
@@ -46,7 +46,7 @@ def chat(agent_id: str = None,
         session.add_message("user", question)
 
         # Get answer with context
-        answer = chat.ask(
+        response = chat.ask(
             question=question,
             context=session.get_context(),
             streaming=False,
@@ -56,14 +56,14 @@ def chat(agent_id: str = None,
         )
         
         # Get message from response
-        message = answer.get("message", "")
+        message = response.get("message", "")
 
         # Add assistant response to session
         session.add_message("assistant", message)
         
         return {
             "session": session,
-            "answer": answer,
+            "response": response,
             "message": message
         }
         
@@ -74,6 +74,6 @@ def chat(agent_id: str = None,
 
         return {
             "session": session,
-            "answer": answer,
+            "response": response,
             "message": message
         }
