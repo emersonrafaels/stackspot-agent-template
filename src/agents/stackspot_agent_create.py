@@ -1,13 +1,13 @@
 from pathlib import Path
 from typing import Any, Dict, List
 
-from src.agents.base_agent import BaseAgent
-from src.config.config_dynaconf import get_settings
-from src.config.config_logger import logger
-from src.config.stackspot_config import get_stackspot_config
-from src.models.llm import LLMConfig
-from src.models.prompt import PromptConfig
-from src.utils.api_client import StackSpotAPIClient
+from .base_agent import BaseAgent
+from ..config.config_dynaconf import get_settings
+from ..config.config_logger import logger
+from ..config.stackspot_config import get_stackspot_config
+from ..models.llm import LLMConfig
+from ..models.prompt import PromptConfig
+from ..utils.api_client import StackSpotAPIClient
 
 # Retrieve settings instance
 settings = get_settings()
@@ -47,12 +47,10 @@ class StackSpotAgent(BaseAgent):
         self.description = description
         self.llm = llm_config
         self.prompt = prompt_config
-        
+
         # Retrieve settings instance
         stackspot_config = get_stackspot_config(
-            agent_id=name,
-            client_id=client_id,
-            client_secret=client_secret
+            agent_id=name, client_id=client_id, client_secret=client_secret
         )
 
         # Get base URLs from settings if not provided
@@ -183,6 +181,7 @@ class StackSpotAgent(BaseAgent):
         except Exception as e:
             logger.error(f"Error deleting agent: {str(e)}")
             raise
+
 
 # Create dummy configs since we're using an existing agent
 dummy_llm = LLMConfig(

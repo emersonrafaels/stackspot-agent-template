@@ -1,17 +1,12 @@
 """Module for chatting with StackSpot agents."""
 
-import sys
-from typing import List, Optional, Union
 from pathlib import Path
+from typing import List, Optional, Union
 
-# Adjust the path to import from src directory
-base_dir = Path(__file__).parents[2]
-sys.path.insert(0, str(base_dir))
-
-from src.agents.stackspot_agent_chat import StackSpotAgent
-from src.config.config_logger import logger
-from src.models.llm import LLMConfig
-from src.models.prompt import PromptConfig
+from .stackspot_agent_chat import StackSpotAgent
+from ..config.config_logger import logger
+from ..models.llm import LLMConfig
+from ..models.prompt import PromptConfig
 
 
 class AgentChat(StackSpotAgent):

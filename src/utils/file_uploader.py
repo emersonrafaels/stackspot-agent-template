@@ -6,8 +6,8 @@ import json
 
 import requests
 
-from src.config.config_logger import logger
-from src.config.stackspot_config import get_stackspot_config
+from ..config.config_logger import logger
+from ..config.stackspot_config import get_stackspot_config
 
 
 class FileUploader:
@@ -22,7 +22,7 @@ class FileUploader:
         """
         self.access_token = access_token
         self.account_id = account_id
-        
+
         stackspot_config = get_stackspot_config()
 
         self.upload_api = stackspot_config.get("upload_url")

@@ -3,8 +3,8 @@ from typing import Any, Dict, List
 
 import requests
 
-from src.config.config_logger import logger
-from src.utils.url_utils import build_url
+from ..config.config_logger import logger
+from .url_utils import build_url
 
 
 class StackSpotAPIClient:

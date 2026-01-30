@@ -13,10 +13,7 @@ from src.models.prompt import PromptConfig
 settings = get_settings()
 
 
-def main(realm: str = None, 
-         client_id: str = None,
-         client_secret: str = None):
-    
+def main(realm: str = None, client_id: str = None, client_secret: str = None):
     """Example of creating and using a StackSpot agent."""
     # Create configurations
     llm_config = LLMConfig(provider="openai", model="gpt-4o-mini")
@@ -40,11 +37,9 @@ def main(realm: str = None,
 
 
 if __name__ == "__main__":
-    
+
     realm = "stackspot-freemium"
     client_id = "5ebf7401-29fc-494c-b7e4-ec59f2518077"
     client_secret = "7ty3d1ef3bhbj6k6Dq5Ez14xa7x6vCSK6xKkVSYkaDCbEQ788ut2C4CPq5Pg6i9p"
-    
-    main(realm=realm,
-         client_id=client_id, 
-         client_secret=client_secret)
+
+    main(realm=realm, client_id=client_id, client_secret=client_secret)
