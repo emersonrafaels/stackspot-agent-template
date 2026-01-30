@@ -11,18 +11,20 @@ from src.agents.chat import AgentChat
 from src.models.chat_session import ChatSession
 
 
-def chat(agent_id: str = None,
-         realm: str = None, 
-         client_id: str = None,
-         client_secret: str = None, 
-         question: str = "", 
-         files: List[Union[str, Path]] = None):
-    
+def chat(
+    agent_id: str = None,
+    realm: str = None,
+    client_id: str = None,
+    client_secret: str = None,
+    question: str = "",
+    files: List[Union[str, Path]] = None,
+):
+
     # Iniciando as variáveis
     session = None
     answer = None
     message = None
-    
+
     try:
         print("StackSpot Chat")
         print("-------------")
@@ -33,10 +35,7 @@ def chat(agent_id: str = None,
 
         # Initialize chat with agent
         chat = AgentChat(
-            agent_id=agent_id,
-            realm=realm,
-            client_id=client_id,
-            client_secret=client_secret
+            agent_id=agent_id, realm=realm, client_id=client_id, client_secret=client_secret
         )
 
         for msg in session.messages:
@@ -54,26 +53,17 @@ def chat(agent_id: str = None,
             return_ks_in_response=False,
             files=files if files else None,
         )
-        
+
         # Get message from response
         message = answer.get("message", "")
 
         # Add assistant response to session
         session.add_message("assistant", message)
-        
-        return {
-            "session": session,
-            "answer": answer,
-            "message": message
-        }
-        
+
+        return {"session": session, "answer": answer, "message": message}
 
     except Exception as e:
         print(f"Erro: {e}")
         print("Erro ao processar pergunta. Tente novamente.")
 
-        return {
-            "session": session,
-            "answer": answer,
-            "message": message
-        }
+        return {"session": session, "answer": answer, "message": message}

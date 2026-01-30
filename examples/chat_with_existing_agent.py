@@ -10,13 +10,9 @@ from src.agents.chat import AgentChat
 from src.models.chat_session import ChatSession
 
 
-def main(agent_id: str = None,
-         realm: str = None, 
-         client_id: str = None,
-         client_secret: str = None):
-    
+def main(agent_id: str = None, realm: str = None, client_id: str = None, client_secret: str = None):
     """Run chat example."""
-    
+
     try:
         print("StackSpot Chat")
         print("-------------")
@@ -27,10 +23,7 @@ def main(agent_id: str = None,
 
         # Initialize chat with agent
         chat = AgentChat(
-            agent_id=agent_id,
-            realm=realm,
-            client_id=client_id,
-            client_secret=client_secret
+            agent_id=agent_id, realm=realm, client_id=client_id, client_secret=client_secret
         )
 
         print("\nChat iniciado! Digite 'sair' para encerrar.")
@@ -70,7 +63,7 @@ def main(agent_id: str = None,
                     use_stackspot_docs=True,
                     return_ks_in_response=False,
                 )
-                
+
                 # Get message from response
                 message = answer.get("message", "")
 
@@ -78,7 +71,7 @@ def main(agent_id: str = None,
                 session.add_message("assistant", message)
                 pprint(f"\nResposta: {answer}")
                 print(f"\Mensagem: {message}")
-                
+
             except KeyboardInterrupt:
                 break
 
@@ -96,13 +89,10 @@ def main(agent_id: str = None,
 
 
 if __name__ == "__main__":
-    
+
     agent_id = "01KFJ78NYVJSY8YS5A681Q5XT5"
     realm = "stackspot-freemium"
     client_id = "5ebf7401-29fc-494c-b7e4-ec59f2518077"
     client_secret = "7ty3d1ef3bhbj6k6Dq5Ez14xa7x6vCSK6xKkVSYkaDCbEQ788ut2C4CPq5Pg6i9p"
-    
-    main(agent_id=agent_id,
-         realm=realm, 
-         client_id=client_id, 
-         client_secret=client_secret)
+
+    main(agent_id=agent_id, realm=realm, client_id=client_id, client_secret=client_secret)

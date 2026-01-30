@@ -33,15 +33,13 @@ class StackSpotAgent(BaseAgent):
             client_secret (str): OAuth client secret
             endpoint (str, optional): API endpoint for agent operations. Defaults to None.
         """
-        
+
         # Store agent ID
         self.agent_id = agent_id
-        
+
         # Retrieve settings instance
         stackspot_config = get_stackspot_config(
-            agent_id=self.agent_id,
-            client_id=client_id,
-            client_secret=client_secret
+            agent_id=self.agent_id, client_id=client_id, client_secret=client_secret
         )
 
         # Get base URLs from settings if not provided

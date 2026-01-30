@@ -22,7 +22,7 @@ class FileUploader:
         """
         self.access_token = access_token
         self.account_id = account_id
-        
+
         stackspot_config = get_stackspot_config()
 
         self.upload_api = stackspot_config.get("upload_url")

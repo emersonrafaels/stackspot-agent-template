@@ -47,12 +47,10 @@ class StackSpotAgent(BaseAgent):
         self.description = description
         self.llm = llm_config
         self.prompt = prompt_config
-        
+
         # Retrieve settings instance
         stackspot_config = get_stackspot_config(
-            agent_id=name,
-            client_id=client_id,
-            client_secret=client_secret
+            agent_id=name, client_id=client_id, client_secret=client_secret
         )
 
         # Get base URLs from settings if not provided
@@ -183,6 +181,7 @@ class StackSpotAgent(BaseAgent):
         except Exception as e:
             logger.error(f"Error deleting agent: {str(e)}")
             raise
+
 
 # Create dummy configs since we're using an existing agent
 dummy_llm = LLMConfig(

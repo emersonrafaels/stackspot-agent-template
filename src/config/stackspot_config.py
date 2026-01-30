@@ -12,12 +12,11 @@ from src.utils.url_utils import build_url
 
 
 @lru_cache()
-def get_stackspot_config(agent_id: str = None, 
-                         realm: str = None,
-                         client_id: str = None, 
-                         client_secret: str = None) -> dict:
+def get_stackspot_config(
+    agent_id: str = None, realm: str = None, client_id: str = None, client_secret: str = None
+) -> dict:
     """Get StackSpot configuration from settings.
-    
+
     # Args:
         agent_id (str, optional): Specific agent ID. Defaults to None.
         client_id (str, optional): Specific client ID. Defaults to None.
@@ -46,7 +45,7 @@ def get_stackspot_config(agent_id: str = None,
         settings.get("stackspot.inference.agent_resource", "agent"),
         agent_id,
     )
-    
+
     # Build upload url
     upload_api = build_url(
         settings.get("stackspot.upload.base_url", "https://genai-inference-app.stackspot.com"),
